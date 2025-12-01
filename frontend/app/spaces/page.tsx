@@ -5,24 +5,34 @@ import Facilities from "../components/Facilities";
 import BrowseBySize from "../components/BrowseBySize";
 import HowItWorks from "../components/HowItWorks";
 import { ChevronRight } from 'lucide-react';
+import Link from "next/link";
 
 
-export default function ContactPage() {
+export default function SpacesPage() {
   return (
     <>
       <Header />
      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center justify-center bg-gradient-to-r from-black to-gray-900">
-        <div className="absolute inset-0 bg-black/50"></div>
-        <div className="container mx-auto px-4 relative z-10 text-center">
-          <h2 className="text-5xl text-white mb-4 animate-fadeIn">Our Spaces</h2>
-          <div className="flex items-center justify-center gap-2 text-white animate-fadeIn" style={{ animationDelay: '0.2s' }}>
-            <a href="#" className="hover:text-[#ff836b] transition">Home</a>
-            <ChevronRight size={16} />
-            <span className="text-[#ff836b]">Spaces</span>
-          </div>
+     <section className="relative min-h-[50vh] flex items-center justify-center"> 
+        <div className="absolute inset-0">
+          <img
+            src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?w=800&h=600&fit=crop"
+            alt="image" 
+            className="object-cover w-full h-full"
+          />
+          <div className="absolute inset-0 bg-black/50"></div>
+        </div>  
+
+      {/* Content */}
+      <div className="container mx-auto px-4 relative z-10 text-center text-white">
+        <h2 className="text-5xl mb-4 font-bold">Our Spaces</h2>
+        <div className="flex items-center justify-center gap-2 text-gray-300">
+          <Link href="/" className="hover:text-white transition">Home</Link>
+          <ChevronRight size={16} className="text-orange-500" />
+          <span className="text-whit">Spaces</span>
         </div>
-      </section>
+      </div>
+    </section>
      <Spaces/>
      <Facilities/>
      <BrowseBySize/>

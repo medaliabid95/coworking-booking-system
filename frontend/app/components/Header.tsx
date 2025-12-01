@@ -5,7 +5,6 @@ import Link from "next/link";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [mobileDropdowns, setMobileDropdowns] = useState({
     spaces: false,
     pages: false,
@@ -18,8 +17,10 @@ export default function Header() {
     }));
   };
 
+  const pages = ["Events", "Events Detail","FAQs", "Gallery", "Pricing", "Team", "Blog", "Single Post", "404 Page"];
+
   return (
-    <header className="bg-white sticky top-0 z-50 shadow-sm">
+    <header className="bg-white sticky top-0 z-50 shadow-sm overflow-visible">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
 
@@ -33,7 +34,7 @@ export default function Header() {
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8 pb-2">
+          <nav className="hidden lg:flex items-center space-x-8 pb-2 relative">
 
             <Link href="/" className="text-[#9f9f9f] hover:text-black transition">Home</Link>
             <Link href="/about" className="text-[#9f9f9f] hover:text-black transition">About</Link>
@@ -41,27 +42,25 @@ export default function Header() {
             {/* Spaces Dropdown */}
             <div className="relative group">
               <button className="text-[#9f9f9f] hover:text-black transition flex items-center gap-1">
-                Spaces
-                <ChevronDown size={16} />
+                Spaces <ChevronDown className="text-orange-500" size={16} />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-48 bg-black text-white shadow-lg rounded-lg py-2 hidden group-hover:block">
-                <Link href="/spaces" className="block px-4 py-2 hover:bg-gray-700">Spaces</Link>
-                <Link href="/spaces/detail" className="block px-4 py-2 hover:bg-gray-700">Space Detail</Link>
+              <div className="absolute top-full left-0 mt-2 w-48 bg-black text-white shadow-lg rounded-lg py-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50 pointer-events-auto">
+                <Link href="/spaces" className="block px-4 py-2 text-gray-400 hover:text-white transition">Spaces</Link>
+                <Link href="/spaces-detail" className="block px-4 py-2 text-gray-400 hover:text-white transition">Space Detail</Link>
               </div>
             </div>
 
             {/* Pages Dropdown */}
             <div className="relative group">
               <button className="text-[#9f9f9f] hover:text-black transition flex items-center gap-1">
-                Pages
-                <ChevronDown size={16} />
+                Pages <ChevronDown className="text-orange-500"  size={16} />
               </button>
-              <div className="absolute top-full left-0 mt-2 w-56 bg-black text-white shadow-lg rounded-lg py-2 hidden group-hover:block">
-                {["Events", "Events Detail","FAQs", "Gallery", "Pricing", "Team", "Blog", "Single Post", "404 Page"].map((item, index) => (
+              <div className="absolute top-full left-0 mt-2 w-56 bg-black text-white shadow-lg rounded-lg py-2 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-200 z-50 pointer-events-auto">
+                {pages.map((item, index) => (
                   <Link
                     key={index}
                     href={`/${item.toLowerCase().replace(" ", "-")}`}
-                    className="block px-4 py-2 hover:bg-gray-700"
+                    className="block px-4 py-2 text-gray-400 hover:text-white transition"
                   >
                     {item}
                   </Link>
@@ -70,19 +69,13 @@ export default function Header() {
             </div>
 
             <Link href="/contact" className="text-[#9f9f9f] hover:text-black transition">Contact</Link>
-
-            {/* CTA Button */}
-            <Link href="/get-started" className="bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
+            <Link href="#" className="bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
               Get Started
             </Link>
-
           </nav>
 
           {/* Mobile Menu Button */}
-          <button
-            className="lg:hidden text-black"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-          >
+          <button className="lg:hidden text-black" onClick={() => setIsMenuOpen(!isMenuOpen)}>
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
@@ -101,15 +94,12 @@ export default function Header() {
                 className="flex items-center justify-between w-full text-black"
               >
                 Spaces
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${mobileDropdowns.spaces ? "rotate-180" : ""}`}
-                />
+                <ChevronDown size={16} className={`transform transition-transform ${mobileDropdowns.spaces ? "rotate-180" : ""}`} />
               </button>
               {mobileDropdowns.spaces && (
                 <div className="pl-4 mt-2 space-y-2 bg-black p-2 rounded">
                   <Link href="/spaces" className="block text-white hover:text-[#ff836b] transition">Spaces</Link>
-                  <Link href="/spaces/detail" className="block text-white hover:text-[#ff836b] transition">Space Detail</Link>
+                  <Link href="/spaces-detail" className="block text-white hover:text-[#ff836b] transition">Space Detail</Link>
                 </div>
               )}
             </div>
@@ -121,14 +111,11 @@ export default function Header() {
                 className="flex items-center justify-between w-full text-black"
               >
                 Pages
-                <ChevronDown
-                  size={16}
-                  className={`transform transition-transform ${mobileDropdowns.pages ? "rotate-180" : ""}`}
-                />
+                <ChevronDown size={16} className={`transform transition-transform ${mobileDropdowns.pages ? "rotate-180" : ""}`} />
               </button>
               {mobileDropdowns.pages && (
                 <div className="pl-4 mt-2 space-y-2 bg-black p-2 rounded">
-                  {["Events", "Events Detail","FAQs", "Gallery", "Pricing", "Team", "Blog", "Single Post", "404 Page"].map((item, index) => (
+                  {pages.map((item, index) => (
                     <Link
                       key={index}
                       href={`/${item.toLowerCase().replace(" ", "-")}`}
@@ -142,14 +129,9 @@ export default function Header() {
             </div>
 
             <Link href="/contact" className="block text-black">Contact</Link>
-
-            <Link
-              href="/get-started"
-              className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black block text-center"
-            >
+            <Link href="#" className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black block text-center">
               Get Started
             </Link>
-
           </div>
         )}
       </div>

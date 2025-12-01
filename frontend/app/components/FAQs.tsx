@@ -28,10 +28,10 @@ export default function FAQs() {
 
     const [openFaq, setOpenFaq] = useState<number | null>(null);
     return(
-         <section className="py-20 bg-[#f5f6f7]">
+         <section className="py-20 bg-[#faf7f2]">
         <div className="container mx-auto px-4">
           <div className="text-center mb-16">
-            <p className="text-[#ff836b] mb-2 animate-fadeIn">FAQs</p>
+            <p className="text-2xl text-[#ff836b] mb-2 animate-fadeIn">FAQs</p>
             <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
               Frequently Asked Questions
             </h2>
