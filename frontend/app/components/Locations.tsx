@@ -1,6 +1,6 @@
 'use client'
 import React from 'react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const locations = [
   { number: '01', name: 'Atlanta' },

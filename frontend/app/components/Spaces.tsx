@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { MapPin, User, ArrowRight } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const spaces = [
   {

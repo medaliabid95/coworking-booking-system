@@ -1,7 +1,7 @@
 'use client'
 import React from 'react';
 import { Circle } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export default function About() {
   return (

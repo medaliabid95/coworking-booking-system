@@ -1,6 +1,6 @@
 'use client'
 import { Star } from 'lucide-react';
-import { ImageWithFallback } from './figma/ImageWithFallback';
+import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const testimonials = [
   {
