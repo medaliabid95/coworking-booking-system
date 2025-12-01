@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import Blogs from "../components/Blogs";
 
 
 
@@ -30,7 +31,7 @@ export default function BlogPage() {
         </div>
       </div>
     </section>
- 
+     <Blogs/>
      <Footer />
     </>
   );
