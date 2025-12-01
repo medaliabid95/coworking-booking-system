@@ -45,11 +45,11 @@ const pricingTiers = [
 
 export default function PricingCards() {
   return (
-    <section className="py-16 md:py-24 bg-gray-50">
+    <section className="py-16 md:py-24 bg-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="text-center mb-16">
-          <p className="text-orange-500 mb-2">Pricing Plan</p>
+          <p className="text-2xl text-orange-500 mb-2">Pricing Plan</p>
           <h2 className="text-3xl md:text-4xl lg:text-5xl text-gray-900 mb-4">
             Affordable Pricing Packages
           </h2>
@@ -76,11 +76,11 @@ export default function PricingCards() {
               </div>
 
               <div className="border-t border-gray-200 pt-6 mb-6">
-                <p className="text-sm text-gray-500 mb-4">What's included?</p>
+                <p className="text-sm text-gray-500 mb-4">Whats included?</p>
                 <ul className="space-y-3">
                   {tier.features.map((feature, idx) => (
                     <li key={idx} className="flex items-center gap-3 text-gray-700">
-                      <div className="flex-shrink-0 w-5 h-5 rounded-full bg-orange-100 flex items-center justify-center">
+                      <div className="flex-shrink-0 w-5 h-5 flex items-center justify-center">
                         <Check size={14} className="text-orange-500" />
                       </div>
                       <span>{feature}</span>
@@ -89,7 +89,7 @@ export default function PricingCards() {
                 </ul>
               </div>
 
-              <button className="w-full py-3 rounded-lg transition bg-black text-white hover:bg-orange-500">
+              <button className="w-full py-3 transition bg-black text-white hover:bg-orange-500">
                 Get Started
               </button>
 
@@ -101,15 +101,17 @@ export default function PricingCards() {
         </div>
 
         {/* Custom Pricing CTA */}
-        <div className="bg-gradient-to-r from-orange-500 to-orange-600 rounded-2xl p-8 md:p-12 text-white text-center md:text-left">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
-            <p className="text-xl md:text-2xl">Need a custom pricing plan?</p>
-            <button className="bg-white text-orange-500 px-8 py-3 rounded-lg hover:bg-gray-100 transition flex items-center gap-2">
-              Let's Talk
-              <ArrowRight size={20} />
-            </button>
-          </div>
-        </div>
+            <div className="bg-black  p-8 md:p-12 text-white text-center md:text-left">
+            <div className="flex flex-col md:flex-row items-center justify-between">
+                <p className="text-xl md:text-2xl">Need a custom pricing plan?</p>
+
+                <button className="bg-black text-white px-8 py-3 rounded-lg transition flex items-center gap-2 hover:text-orange-500">
+                Lets Talk
+                <ArrowRight size={20} />
+                </button>
+            </div>
+            </div>
+
       </div>
     </section>
   );
