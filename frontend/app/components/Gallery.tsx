@@ -19,11 +19,11 @@ export default function Gallery() {
   }, []);
 
   return (
-    <section className="py-20 bg-gradient-to-r from-purple-900 to-indigo-900">
+    <section className="py-20 " style={{backgroundColor : 'black'}}>
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-purple-300 mb-2 animate-fadeIn">Gallery</p>
+          <p className="text-2xl text-orange-500 mb-3 animate-fadeIn">Gallery</p>
           <h2 className="text-4xl lg:text-5xl text-white animate-fadeIn" style={{ animationDelay: '0.1s' }}>
             Build a Better Office Environment
           </h2>

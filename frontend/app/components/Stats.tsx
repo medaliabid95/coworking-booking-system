@@ -61,7 +61,7 @@ function Counter({ end, suffix = '', duration = 2000 }: { end: number; suffix?: 
 
 export default function Stats() {
   return (
-    <section className="py-16 bg-gradient-to-r from-purple-50 to-indigo-50 -mt-20 relative z-20">
+    <section className="py-16 bg-gradient-to-b from-transparent to-[#FAF7F2] -mt-20 relative z-20">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
           {stats.map((stat, index) => (
@@ -71,10 +71,10 @@ export default function Stats() {
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <div className="flex items-center justify-between mb-4">
-                <stat.icon className="w-12 h-12 text-purple-600" />
+                <stat.icon className="w-12 h-12 text-black-600" />
               </div>
               <h3 className="text-gray-800 mb-2">{stat.label}</h3>
-              <div className="text-4xl text-purple-900">
+              <div className="text-4xl text-black-900">
                 <Counter end={stat.value} suffix={stat.suffix} />
               </div>
             </div>

@@ -6,37 +6,38 @@ export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
-    <header className="bg-gradient-to-r from-purple-900 to-indigo-900 sticky top-0 z-50">
+    <header className="bg-white sticky top-0 z-50 shadow-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between py-4">
+          
           {/* Logo */}
-          <div className="flex-shrink-0">
-            <a href="#" className="text-3xl tracking-wider text-white">
-              VARSPACE
+         <div className="flex-shrink-0">
+            <a href="#">
+              <img
+                src="https://askproject.net/varspace/wp-content/uploads/sites/142/2023/05/logo_Asset-1-800x255.png"
+                alt="VARSPACE Logo"
+                className="h-12 w-auto"
+              />
             </a>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden lg:flex items-center space-x-8">
-            <a href="#home" className="text-white hover:text-purple-300 transition">Home</a>
-            <a href="#about" className="text-white hover:text-purple-300 transition">About</a>
-            <div className="relative group">
-              <a href="#spaces" className="text-white hover:text-purple-300 transition">Spaces</a>
-            </div>
-            <div className="relative group">
-              <a href="#pages" className="text-white hover:text-purple-300 transition">Pages</a>
-            </div>
-            <a href="#contact" className="text-white hover:text-purple-300 transition">Contact</a>
+          <nav className="hidden lg:flex items-center space-x-8 pb-2">
+            <a href="#home" className="text-gray-700 hover:text-black transition">Home</a>
+            <a href="#about" className="text-gray-700 hover:text-black transition">About</a>
+            <a href="#spaces" className="text-gray-700 hover:text-black transition">Spaces</a>
+            <a href="#pages" className="text-gray-700 hover:text-black transition">Pages</a>
+            <a href="#contact" className="text-gray-700 hover:text-black transition">Contact</a>
           </nav>
 
           {/* CTA Button */}
-          <button className="hidden lg:block bg-white text-purple-900 px-6 py-2 rounded hover:bg-purple-100 transition">
+          <button className="hidden lg:block bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
             Get Started
           </button>
 
           {/* Mobile Menu Button */}
           <button 
-            className="lg:hidden text-white"
+            className="lg:hidden text-black"
             onClick={() => setIsMenuOpen(!isMenuOpen)}
           >
             {isMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -46,12 +47,14 @@ export default function Header() {
         {/* Mobile Menu */}
         {isMenuOpen && (
           <div className="lg:hidden py-4 space-y-4">
-            <a href="#home" className="block text-white hover:text-purple-300 transition">Home</a>
-            <a href="#about" className="block text-white hover:text-purple-300 transition">About</a>
-            <a href="#spaces" className="block text-white hover:text-purple-300 transition">Spaces</a>
-            <a href="#pages" className="block text-white hover:text-purple-300 transition">Pages</a>
-            <a href="#contact" className="block text-white hover:text-purple-300 transition">Contact</a>
-            <button className="w-full bg-white text-purple-900 px-6 py-2 rounded hover:bg-purple-100 transition">
+            <a href="#home" className="block text-black hover:text-black transition">Home</a>
+            <a href="#about" className="block text-black hover:text-black transition">About</a>
+            <a href="#spaces" className="block text-black hover:text-black transition">Spaces</a>
+            <a href="#pages" className="block text-black hover:text-black transition">Pages</a>
+            <a href="#contact" className="block text-black hover:text-black transition">Contact</a>
+
+            {/* Mobile CTA */}
+            <button className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
               Get Started
             </button>
           </div>

@@ -29,18 +29,21 @@ const posts = [
 
 export default function Blog() {
   return (
-    <section className="py-20 bg-gradient-to-r from-purple-50 to-indigo-50">
+    <section className="py-20 bg-[#f5f6f7]">
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16">
           <div>
-            <p className="text-purple-600 mb-2 animate-fadeIn">Blog News</p>
+            <p className="text-2xl text-orange-400 mb-2 animate-fadeIn uppercase">Blog News</p>
             <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
               Latest Articles From Varspace
             </h2>
           </div>
-          <button className="mt-6 lg:mt-0 text-purple-600 hover:text-purple-800 transition animate-fadeIn" style={{ animationDelay: '0.6s' }}>
-            Browse All →
+         <button
+            className="mt-6 lg:mt-0 bg-black text-white px-6 py-2 rounded hover:bg-orange-500 transition animate-fadeIn"
+            style={{ animationDelay: '0.6s' }}
+          >
+            Browse All
           </button>
         </div>
 
@@ -64,7 +67,7 @@ export default function Blog() {
                   {post.categories.map((category, catIndex) => (
                     <span
                       key={catIndex}
-                      className="bg-purple-600 text-white text-xs px-3 py-1 rounded-full"
+                      className="bg-black text-white text-xs px-3 py-1 rounded-full"
                     >
                       {category}
                     </span>

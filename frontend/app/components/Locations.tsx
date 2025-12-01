@@ -21,8 +21,8 @@ export default function Locations() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-purple-600 mb-2 animate-fadeIn">Our Locations</p>
-          <h2 className="text-4xl lg:text-5xl text-gray-900 mb-4 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+          <p className="text-2xl text-orange-500 mb-2 animate-fadeIn">Our Locations</p>
+          <h2 className="text-4xl lg:text-5xl text-black mb-4 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
             Co-working Is the Building Block of Success
           </h2>
           <p className="text-gray-600 animate-fadeIn" style={{ animationDelay: '0.2s' }}>
@@ -35,12 +35,13 @@ export default function Locations() {
           <div className="space-y-8 animate-fadeIn" style={{ animationDelay: '0.3s' }}>
             {locations.map((location, index) => (
               <div key={index} className="flex items-center gap-4 group cursor-pointer">
-                <span className="text-3xl text-purple-600">{location.number}.</span>
-                <h4 className="text-2xl text-gray-900 group-hover:text-purple-600 transition">
+                <span className="text-2xl text-black">{location.number}.</span>
+                <h4 className="text-5xl text-black border-b-2 border-transparent group-hover:border-orange-500 transition-all">
                   <a href="#">{location.name}</a>
                 </h4>
               </div>
             ))}
+
           </div>
 
           {/* Location Images */}
@@ -63,7 +64,7 @@ export default function Locations() {
 
         {/* CTA Button */}
         <div className="text-center mt-12 animate-fadeIn" style={{ animationDelay: '0.6s' }}>
-          <button className="bg-purple-600 text-white px-8 py-3 rounded hover:bg-purple-700 transition">
+          <button className="bg-black text-white px-8 py-3 rounded hover:bg-orange-500 transition">
             Browse Spaces
           </button>
         </div>

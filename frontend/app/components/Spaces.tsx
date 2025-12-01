@@ -39,17 +39,22 @@ export default function Spaces() {
     <section id="spaces" className="py-20 bg-white">
       <div className="container mx-auto px-4">
         {/* Header */}
-        <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16">
+          <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center mb-16">
           <div>
-            <p className="text-purple-600 mb-2 animate-fadeIn">Our Spaces</p>
-            <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
-              Do More Than Just Work.<br />Create. Innovate.
+            <p className="text-2xl text-orange-600 mb-2 animate-fadeIn">Our Spaces</p>
+           <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
+                Do More Than Just Work. Create.<br />
+                Innovate.
             </h2>
           </div>
-          <button className="mt-6 lg:mt-0 text-purple-600 hover:text-purple-800 transition animate-fadeIn" style={{ animationDelay: '0.6s' }}>
-            Browse All →
+          <button 
+            className="mt-6 lg:mt-0 bg-black text-white px-4 py-2 rounded transition hover:bg-orange-500 hover:text-black animate-fadeIn" 
+            style={{ animationDelay: '0.6s' }}
+          >
+            Browse All
           </button>
         </div>
+
 
         {/* Spaces Grid */}
         <div className="grid md:grid-cols-2 gap-8">
@@ -66,7 +71,7 @@ export default function Spaces() {
                   className="w-full h-80 object-cover group-hover:scale-110 transition-transform duration-500"
                 />
                 <div className="absolute top-4 left-4 bg-white/90 backdrop-blur-sm px-4 py-2 rounded-full flex items-center gap-2">
-                  <MapPin size={16} className="text-purple-600" />
+                  <MapPin size={16} className="text-orange-600" />
                   <span className="text-sm">{space.location}</span>
                 </div>
               </div>
@@ -74,17 +79,17 @@ export default function Spaces() {
               <div className="p-6 space-y-4">
                 <div className="flex items-center justify-between">
                   <h3 className="text-2xl text-gray-900">
-                    <a href="#" className="hover:text-purple-600 transition">{space.title}</a>
+                    <a href="#" className="hover:text-orange-600 transition">{space.title}</a>
                   </h3>
-                  <div className="flex items-center gap-2 bg-purple-100 px-4 py-2 rounded-full">
-                    <User size={16} className="text-purple-600" />
-                    <span className="text-sm text-purple-900">{space.capacity}</span>
+                  <div className="flex items-center gap-2 bg-orange-100 px-4 py-2 rounded-full">
+                    <User size={16} className="text-orange-600" />
+                    <span className="text-sm text-orange-900">{space.capacity}</span>
                   </div>
                 </div>
 
                 <p className="text-gray-600">{space.description}</p>
 
-                <button className="flex items-center gap-2 text-purple-600 hover:text-purple-800 transition group">
+                <button className="flex items-center gap-2 text-black-600 hover:text-orange-600 transition group">
                   <span>Book Now</span>
                   <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
                 </button>

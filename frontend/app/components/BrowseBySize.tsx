@@ -35,7 +35,7 @@ export default function BrowseBySize() {
       <div className="container mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-16">
-          <p className="text-purple-600 mb-2 animate-fadeIn">Browse More</p>
+          <p className="text-orange-600 mb-2 animate-fadeIn">Browse More</p>
           <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
             Browse Our Office Spaces by Size
           </h2>
@@ -46,10 +46,10 @@ export default function BrowseBySize() {
           {sizes.map((size, index) => (
             <div
               key={index}
-              className="bg-gradient-to-br from-purple-50 to-indigo-50 rounded-lg p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn"
+              className="bg-gradient-to-br from-orange-50 to-[#FAF7F2] rounded-lg p-8 hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 animate-fadeIn"
               style={{ animationDelay: `${0.4 + index * 0.1}s` }}
             >
-              <div className="w-20 h-20 rounded-full bg-purple-600 flex items-center justify-center mb-6">
+              <div className="w-20 h-20 rounded-full bg-orange-600 flex items-center justify-center mb-6">
                 <size.icon className="w-10 h-10 text-white" />
               </div>
               
@@ -58,7 +58,7 @@ export default function BrowseBySize() {
               <p className="text-gray-600 mb-4">{size.description}</p>
               
               <div className="flex items-center gap-2 bg-white px-4 py-2 rounded-full inline-flex">
-                <User size={16} className="text-purple-600" />
+                <User size={16} className="text-orange-600" />
                 <span className="text-sm text-gray-900">{size.capacity}</span>
               </div>
             </div>
