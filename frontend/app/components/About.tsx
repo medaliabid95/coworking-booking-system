@@ -22,7 +22,7 @@ export default function About() {
 
           {/* Content */}
           <div className="space-y-6">
-            <p className="text-orange-600 animate-fadeIn">About Us</p>
+            <p className="text-2xl text-orange-600 animate-fadeIn">About Us</p>
             
             <h2 className="text-4xl lg:text-5xl text-gray-900 animate-fadeIn" style={{ animationDelay: '0.1s' }}>
               The Future of Your Work Starts Here
