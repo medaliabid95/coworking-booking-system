@@ -2,6 +2,7 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import FAQsV2 from "../components/FAQsV2";
 
 
 
@@ -30,7 +31,10 @@ export default function FAQsPage() {
         </div>
       </div>
     </section>
- 
+
+      <FAQsV2 title="About Spaces" />
+      <FAQsV2 title="About Payment" />
+      <FAQsV2 title="Other Questions" />
      <Footer />
      
     </>
