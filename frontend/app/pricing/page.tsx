@@ -2,6 +2,11 @@ import Header from "../components/Header";
 import Footer from "../components/Footer";
 import Link from "next/link";
 import { ChevronRight } from "lucide-react";
+import Testimonials from "../components/Testimonials";
+import HowItWorks from "../components/HowItWorks";
+import FAQsV2 from "../components/FAQsV2";
+import PricingCards from "../components/PricingCards";
+import SpaceBooking from "../components/SpaceBooking";
 
 
 
@@ -30,8 +35,13 @@ export default function PricingPage() {
         </div>
       </div>
     </section>
- 
-     <Footer />
+
+      <PricingCards/>
+      <SpaceBooking/>
+      <Testimonials/>
+      <HowItWorks/>
+      <FAQsV2 title="Frequently Asked Questions"/>
+       <Footer />
      
     </>
   );

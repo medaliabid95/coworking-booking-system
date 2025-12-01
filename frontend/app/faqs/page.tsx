@@ -4,8 +4,6 @@ import Link from "next/link";
 import { ChevronRight } from "lucide-react";
 import FAQsV2 from "../components/FAQsV2";
 
-
-
 export default function FAQsPage() {
   return (
     <>
