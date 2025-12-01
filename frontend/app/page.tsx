@@ -16,6 +16,7 @@ import HowItWorks from './components/HowItWorks';
 import Testimonials from './components/Testimonials';
 import Blog from './components/Blog';
 import Footer from './components/Footer';
+import  Contact from './components/Contact';
 
 export default function App() {
   return (
@@ -28,6 +29,7 @@ export default function App() {
       <Facilities />
       <BrowseBySize />
       <About />
+      <Contact/>
       <Clients />
       <Gallery />
       <VideoTour />
