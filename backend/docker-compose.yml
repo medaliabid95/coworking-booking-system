@@ -1,5 +1,3 @@
-version: '3.9'
-
 services:
   # ---------------------------------------
   # PostgreSQL Database
@@ -36,7 +34,7 @@ services:
   # ---------------------------------------
   api-gateway:
     build:
-      context: ./apps/api-gateway
+      context: ./app/api-gateway
       dockerfile: Dockerfile
     container_name: api-gateway
     restart: always
@@ -55,7 +53,7 @@ services:
   # ---------------------------------------
   booking-service:
     build:
-      context: ./apps/booking-service
+      context: ./app/booking-service
       dockerfile: Dockerfile
     container_name: booking-service
     restart: always
@@ -74,7 +72,7 @@ services:
   # ---------------------------------------
   email-service:
     build:
-      context: ./apps/email-service
+      context: ./app/email-service
       dockerfile: Dockerfile
     container_name: email-service
     restart: always
