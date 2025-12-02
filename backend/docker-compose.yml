@@ -1,0 +1,94 @@
+version: '3.9'
+
+services:
+  # ---------------------------------------
+  # PostgreSQL Database
+  # ---------------------------------------
+  postgres:
+    image: postgres:15
+    container_name: coworking-db
+    restart: always
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: admin123
+      POSTGRES_DB: coworking
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  # ---------------------------------------
+  # RabbitMQ Broker
+  # ---------------------------------------
+  rabbitmq:
+    image: rabbitmq:3.12-management
+    container_name: coworking-rabbitmq
+    restart: always
+    ports:
+      - "5672:5672"   # amqp
+      - "15672:15672" # management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin123
+
+  # ---------------------------------------
+  # API Gateway
+  # ---------------------------------------
+  api-gateway:
+    build:
+      context: ./apps/api-gateway
+      dockerfile: Dockerfile
+    container_name: api-gateway
+    restart: always
+    ports:
+      - "3000:3000"
+    environment:
+      PORT: 3000
+      DATABASE_URL: "postgresql://admin:admin123@postgres:5432/coworking"
+      RABBITMQ_URL: "amqp://admin:admin123@rabbitmq:5672"
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  # ---------------------------------------
+  # Booking Microservice
+  # ---------------------------------------
+  booking-service:
+    build:
+      context: ./apps/booking-service
+      dockerfile: Dockerfile
+    container_name: booking-service
+    restart: always
+    ports:
+      - "3001:3001"
+    environment:
+      PORT: 3001
+      DATABASE_URL: "postgresql://admin:admin123@postgres:5432/coworking"
+      RABBITMQ_URL: "amqp://admin:admin123@rabbitmq:5672"
+    depends_on:
+      - postgres
+      - rabbitmq
+
+  # ---------------------------------------
+  # Email Microservice
+  # ---------------------------------------
+  email-service:
+    build:
+      context: ./apps/email-service
+      dockerfile: Dockerfile
+    container_name: email-service
+    restart: always
+    ports:
+      - "3002:3002"
+    environment:
+      PORT: 3002
+      RABBITMQ_URL: "amqp://admin:admin123@rabbitmq:5672"
+      SMTP_HOST: smtp.gmail.com
+      SMTP_PORT: 587
+      SMTP_USER: your_email@gmail.com
+      SMTP_PASS: your_app_password
+    depends_on:
+      - rabbitmq
+
+volumes:
+  postgres_data:
