@@ -1,34 +1,19 @@
 import { Injectable } from '@nestjs/common';
-import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
-import { User } from '../../../../libs/database/src/entities/user.entity';
+import { RmqService } from '../rmq/rmq.service';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectRepository(User) private repo: Repository<User>) {}
+  private client;
 
-  create(user: Partial<User>) {
-    return this.repo.save(this.repo.create(user));
+  constructor(private rmq: RmqService) {
+    this.client = this.rmq.getBookingService();
   }
+
+  async getUser(id: string) {
+    return this.client.send({ cmd: 'get_user_by_id' }, { id });
+  }
+
   async findAll() {
-    const users = await this.repo.find();
-    return users.map((u) => {
-      const { password, ...result } = u;
-      return result;
-  });
-}
-
-  async findOne(id: string) {
-    const user = await this.repo.findOne({ where: { id } });
-    if (!user) return null;
-    const { password, ...result } = user;
-    return result;
-  }
-
-  update(id: string, data: Partial<User>) {
-    return this.repo.update(id, data);
-  }
-  remove(id: string) {
-    return this.repo.delete(id);
+    return this.client.send({ cmd: 'get_users' }, {});
   }
 }

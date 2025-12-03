@@ -5,7 +5,7 @@ import { Room } from './room.entity';
 @Entity()
 export class Booking {
   @PrimaryGeneratedColumn('uuid')
-  id: number;
+  id: string;
 
   @ManyToOne(() => User, (user) => user.bookings)
   user: User;

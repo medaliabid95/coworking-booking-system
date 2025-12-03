@@ -2,42 +2,53 @@ import {
   Controller,
   Get,
   Post,
-  Body,
-  Param,
   Put,
   Delete,
-  UseGuards,
+  Body,
+  Param,
+  Inject,
 } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { ClientProxy } from '@nestjs/microservices';
+import { firstValueFrom } from 'rxjs';
 
 @Controller('users')
 export class UsersController {
-  constructor(private readonly service: UsersService) {}
+  constructor(
+    @Inject('BOOKING_SERVICE') private readonly bookingClient: ClientProxy,
+  ) {}
 
-  @UseGuards(JwtAuthGuard)
+  @Post()
+  async createUser(@Body() userDto: any) {
+    return await firstValueFrom(
+      this.bookingClient.send({ cmd: 'create_user' }, userDto),
+    );
+  }
+
   @Get()
-  findAll() {
-    return this.service.findAll();
+  async getUsers() {
+    return await firstValueFrom(
+      this.bookingClient.send({ cmd: 'get_all_users' }, {}),
+    );
   }
 
   @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.service.findOne(id);
-  }
-
-  @Post()
-  create(@Body() body) {
-    return this.service.create(body);
+  async getUser(@Param('id') id: string) {
+    return await firstValueFrom(
+      this.bookingClient.send({ cmd: 'get_user' }, { id }),
+    );
   }
 
   @Put(':id')
-  update(@Param('id') id: string, @Body() body) {
-    return this.service.update(id, body);
+  async updateUser(@Param('id') id: string, @Body() userDto: any) {
+    return await firstValueFrom(
+      this.bookingClient.send({ cmd: 'update_user' }, { id, ...userDto }),
+    );
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.service.remove(id);
+  async deleteUser(@Param('id') id: string) {
+    return await firstValueFrom(
+      this.bookingClient.send({ cmd: 'delete_user' }, { id }),
+    );
   }
 }
