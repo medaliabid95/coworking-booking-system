@@ -11,6 +11,7 @@ import { BookingServiceService } from './booking-service.service';
 import { User } from '../../../libs/database/src/entities/user.entity';
 import { Room } from '../../../libs/database/src/entities/room.entity';
 import { Booking } from '../../../libs/database/src/entities/booking.entity';
+import { CreateBookingDto } from './dto/create-booking.dto';
 
 @Controller()
 export class BookingServiceController {
@@ -70,13 +71,13 @@ export class BookingServiceController {
 
   // Bookings
   @Post('bookings')
-  createBooking(@Body() booking: Partial<Booking>) {
+  createBooking(@Body() booking: CreateBookingDto) {
     return this.service.createBooking(booking);
   }
 
   @Get('bookings')
-  getBookings() {
-    return this.service.getBookings();
+  async getBookings() {
+    return await this.service.getBookings();
   }
 
   @Get('bookings/:id')

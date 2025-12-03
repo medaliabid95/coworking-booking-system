@@ -1,9 +1,10 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { User } from '../../../libs//database/src/entities/user.entity';
-import { Room } from '../../../libs//database/src/entities/room.entity';
-import { Booking } from '../../../libs//database/src/entities/booking.entity';
+import { ClientProxy } from '@nestjs/microservices';
+import { User } from '../../../libs/database/src/entities/user.entity';
+import { Room } from '../../../libs/database/src/entities/room.entity';
+import { Booking } from '../../../libs/database/src/entities/booking.entity';
 
 @Injectable()
 export class BookingServiceService {
@@ -11,6 +12,7 @@ export class BookingServiceService {
     @InjectRepository(User) private userRepo: Repository<User>,
     @InjectRepository(Room) private roomRepo: Repository<Room>,
     @InjectRepository(Booking) private bookingRepo: Repository<Booking>,
+    @Inject('EMAIL_SERVICE') private readonly emailClient: ClientProxy,
   ) {}
 
   // Users
@@ -57,10 +59,48 @@ export class BookingServiceService {
     return this.roomRepo.delete(id);
   }
 
-  // Bookings
-  createBooking(booking: Partial<Booking>) {
-    const b = this.bookingRepo.create(booking);
-    return this.bookingRepo.save(b);
+  async createBooking(bookingDto: {
+    userId: string;
+    roomId: string;
+    startTime: string;
+    endTime: string;
+  }) {
+    const user = await this.userRepo.findOne({
+      where: { id: bookingDto.userId },
+    });
+    if (!user) throw new Error('User not found');
+
+    const room = await this.roomRepo.findOne({
+      where: { id: bookingDto.roomId },
+    });
+    if (!room) throw new Error('Room not found');
+
+    const startTime = new Date(bookingDto.startTime);
+    const endTime = new Date(bookingDto.endTime);
+
+    if (isNaN(startTime.getTime()) || isNaN(endTime.getTime())) {
+      throw new Error('Invalid startTime or endTime');
+    }
+
+    const booking = this.bookingRepo.create({
+      user,
+      room,
+      startTime,
+      endTime,
+      confirmed: false,
+    });
+
+    const savedBooking = await this.bookingRepo.save(booking);
+
+    // Emit event to email service
+    this.emailClient.emit('booking_created', {
+      user: { email: user.email },
+      room: { name: room.name },
+      startTime,
+      endTime,
+    });
+
+    return savedBooking;
   }
 
   getBookings() {
