@@ -5,33 +5,33 @@ const spaces = [
   {
     name: 'Office Suit',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.',
+    location: 'New York, NY',
     capacity: '8 People',
     price: '$95/month',
-    color: 'bg-orange-500',
     image: 'https://askproject.net/varspace/wp-content/uploads/sites/142/2023/05/the-young-guy-working-on-computer-drinking-coffee-WW3G8X8.jpg'
   },
   {
     name: 'Private Desk',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.',
+    location: 'New York, NY',
     capacity: '2 People',
     price: '$95/month',
-    color: 'bg-gray-900',
     image: 'https://askproject.net/varspace/wp-content/uploads/sites/142/2023/05/woman-is-working-at-sweet-coworking-place-SENU7ZD.jpg'
   },
   {
     name: 'Small Team Space',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.',
+    location: 'New York, NY',
     capacity: '12 People',
     price: '$95/month',
-    color: 'bg-orange-500',
     image: 'https://askproject.net/varspace/wp-content/uploads/sites/142/2023/05/males-and-females-posing-with-gadgets-in-shared-wo-TA7WPMP.jpg'
   },
   {
     name: 'Conference Room',
     description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper.',
+    location: 'New York, NY',
     capacity: '20 People',
     price: '$95/month',
-    color: 'bg-gray-900',
     image: 'https://askproject.net/varspace/wp-content/uploads/sites/142/2023/05/meeting-rooms-TYVC834.jpg'
   }
 ];
