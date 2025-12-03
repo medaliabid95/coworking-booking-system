@@ -23,9 +23,11 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/database": [
+        "libs/database/src",
         "libs/database/src"
       ],
       "@app/database/*": [
+        "libs/database/src/*",
         "libs/database/src/*"
       ]
     }
