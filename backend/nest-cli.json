@@ -14,6 +14,15 @@
         "tsConfigPath": "apps/booking-service/tsconfig.app.json"
       }
     },
+    "database": {
+      "type": "library",
+      "root": "libs/database",
+      "entryFile": "index",
+      "sourceRoot": "libs/database/src",
+      "compilerOptions": {
+        "tsConfigPath": "libs/database/tsconfig.lib.json"
+      }
+    },
     "email-service": {
       "type": "application",
       "root": "apps/email-service",
@@ -23,5 +32,8 @@
         "tsConfigPath": "apps/email-service/tsconfig.app.json"
       }
     }
+  },
+  "compilerOptions": {
+    "webpack": true
   }
 }
