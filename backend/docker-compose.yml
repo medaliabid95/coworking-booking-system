@@ -1,27 +1,101 @@
-version: "3.8"
-
 services:
+  # -----------------------
+  # Database (PostgreSQL)
+  # -----------------------
   postgres:
     image: postgres:15
     container_name: coworking_postgres
+    restart: always
     environment:
       POSTGRES_USER: admin
       POSTGRES_PASSWORD: admin
-      POSTGRES_DB: coworking
+      POSTGRES_DB: coworkingdb
     ports:
       - "5432:5432"
     volumes:
       - postgres_data:/var/lib/postgresql/data
+    networks:
+      - coworking
 
+  # -----------------------
+  # RabbitMQ
+  # -----------------------
   rabbitmq:
     image: rabbitmq:3-management
     container_name: coworking_rabbitmq
+    restart: always
     ports:
-      - "5672:5672"       # RabbitMQ broker
-      - "15672:15672"     # Management UI
-    environment:
-      RABBITMQ_DEFAULT_USER: guest
-      RABBITMQ_DEFAULT_PASS: guest
+      - "5672:5672"  # AMQP
+      - "15672:15672" # Dashboard
+    networks:
+      - coworking
 
+  # -----------------------
+  # Booking Microservice
+  # -----------------------
+  booking-service:
+    build:
+      context: .
+      dockerfile: apps/booking-service/Dockerfile
+    container_name: booking_service
+    restart: always
+    depends_on:
+      - postgres
+      - rabbitmq
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_PORT: 5432
+      DATABASE_USER: admin
+      DATABASE_PASSWORD: admin
+      DATABASE_NAME: coworkingdb
+
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    networks:
+      - coworking
+
+  # -----------------------
+  # Email Microservice
+  # -----------------------
+  email-service:
+    build:
+      context: .
+      dockerfile: apps/email-service/Dockerfile
+    container_name: email_service
+    restart: always
+    depends_on:
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+      
+      SMTP_HOST: smtp.gmail.com       # change later
+      SMTP_PORT: 587
+      SMTP_USER: your_email
+      SMTP_PASS: your_password
+    networks:
+      - coworking
+
+  # -----------------------
+  # API Gateway (optional)
+  # -----------------------
+  api-gateway:
+    build:
+      context: .
+    container_name: api_gateway
+    restart: always
+    depends_on:
+      - booking-service
+      - rabbitmq
+    environment:
+      RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
+    ports:
+      - "3000:3000"
+    networks:
+      - coworking
+
+# Persistent volumes
 volumes:
   postgres_data:
+
+networks:
+  coworking:
+    driver: bridge

@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
-import { ClientsModule, Transport } from '@nestjs/microservices';
 import { UsersController } from './users.controller';
+import { UsersService } from './users.service';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   imports: [
@@ -9,15 +10,14 @@ import { UsersController } from './users.controller';
         name: 'BOOKING_SERVICE',
         transport: Transport.RMQ,
         options: {
-          urls: ['amqp://localhost:5672'],
+          urls: ['amqp://guest:guest@localhost:5672'],
           queue: 'booking_queue',
-          queueOptions: {
-            durable: true,
-          },
         },
       },
     ]),
   ],
   controllers: [UsersController],
+  providers: [UsersService],
+  exports: [UsersService],
 })
 export class UsersModule {}

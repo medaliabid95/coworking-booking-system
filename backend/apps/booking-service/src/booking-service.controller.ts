@@ -1,9 +1,12 @@
 import { Controller, Get } from '@nestjs/common';
+import { BookingService } from './booking-service.service';
 
 @Controller()
 export class BookingServiceController {
-  @Get('health')
-  healthCheck() {
-    return { status: 'Booking service OK' };
+  constructor(private readonly bookingService: BookingService) {}
+
+  @Get()
+  getHealth() {
+    return { status: 'booking-service OK' };
   }
 }

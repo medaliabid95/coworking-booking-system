@@ -1,0 +1,18 @@
+<h2>Hello {{name}},</h2>
+
+<p>Your booking is created for room <strong>{{room}}</strong>.</p>
+
+<p>Date: {{date}}</p>
+<p>Start: {{start}}</p>
+<p>End: {{end}}</p>
+
+<h3>Guests:</h3>
+<ul>
+{{#each guests}}
+  <li>{{this}}</li>
+{{/each}}
+</ul>
+
+<p>Please confirm your booking:</p>
+
+<a href="{{link}}">Confirm Booking</a>

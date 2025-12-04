@@ -1,23 +1,28 @@
-import { Injectable } from '@nestjs/common';
-import { RmqService } from '../rmq/rmq.service';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
+import { UsersService } from '../users/users.service';
+import { JwtService } from '@nestjs/jwt';
+import * as bcrypt from 'bcryptjs';
 
 @Injectable()
 export class AuthService {
-  private bookingClient;
+  constructor(
+    private usersService: UsersService,
+    private jwt: JwtService,
+  ) {}
 
-  constructor(private rmq: RmqService) {
-    this.bookingClient = this.rmq.getBookingService();
+  async validateUser(email: string, password: string) {
+    const user = await this.usersService.findByEmail(email);
+
+    if (!user) throw new UnauthorizedException('Invalid credentials');
+
+    const match = await bcrypt.compare(password, user.password);
+    if (!match) throw new UnauthorizedException('Invalid credentials');
+
+    return user;
   }
 
-  async register(dto: any) {
-    return this.bookingClient.send({ cmd: 'auth_register' }, dto);
-  }
-
-  async login(dto: any) {
-    return this.bookingClient.send({ cmd: 'auth_login' }, dto);
-  }
-
-  async validateToken(token: string) {
-    return this.bookingClient.send({ cmd: 'auth_validate' }, { token });
+  async login(user: any) {
+    const payload = { sub: user.id, email: user.email };
+    return { access_token: this.jwt.sign(payload) };
   }
 }

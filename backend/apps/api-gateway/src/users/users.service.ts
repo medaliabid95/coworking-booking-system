@@ -1,19 +1,18 @@
-import { Injectable } from '@nestjs/common';
-import { RmqService } from '../rmq/rmq.service';
+import { Inject, Injectable } from '@nestjs/common';
+import { ClientProxy } from '@nestjs/microservices';
+import { CreateUserDto } from '@app/common/dtos/create-user.dto';
 
 @Injectable()
 export class UsersService {
-  private client;
+  constructor(
+    @Inject('BOOKING_SERVICE') private bookingClient: ClientProxy,
+  ) {}
 
-  constructor(private rmq: RmqService) {
-    this.client = this.rmq.getBookingService();
+  create(dto: CreateUserDto) {
+    return this.bookingClient.send('user_create', dto);
   }
 
-  async getUser(id: string) {
-    return this.client.send({ cmd: 'get_user_by_id' }, { id });
-  }
-
-  async findAll() {
-    return this.client.send({ cmd: 'get_users' }, {});
+  findByEmail(email: string) {
+    return this.bookingClient.send('user_find_by_email', { email });
   }
 }

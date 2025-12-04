@@ -1,30 +1,17 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { Booking } from '@app/common/entities/booking.entity';
+import { User } from '@app/common/entities/user.entity';
+import { Room } from '@app/common/entities/room.entity';
+
+import { BookingService } from './booking-service.service';
 import { BookingServiceController } from './booking-service.controller';
-import { BookingServiceService } from './booking-service.service';
-import { DatabaseModule } from '@app/database';
-import { User } from '../../../libs/database/src/entities/user.entity';
-import { Room } from '../../../libs/database/src/entities/room.entity';
-import { Booking } from '../../../libs/database/src/entities/booking.entity';
-import { ClientsModule, Transport } from '@nestjs/microservices';
+import { BookingProducer } from './producers/booking.producer';
+import { BookingConsumer } from './consumers/booking.consumer';
 
 @Module({
-  imports: [
-    DatabaseModule,
-    TypeOrmModule.forFeature([User, Room, Booking]),
-    ClientsModule.register([
-      {
-        name: 'EMAIL_SERVICE',
-        transport: Transport.RMQ,
-        options: {
-          urls: ['amqp://guest:guest@localhost:5672'],
-          queue: 'email_queue',
-          queueOptions: { durable: true },
-        },
-      },
-    ]),
-  ],
+  imports: [TypeOrmModule.forFeature([Booking, User, Room])],
   controllers: [BookingServiceController],
-  providers: [BookingServiceService],
+  providers: [BookingService, BookingProducer, BookingConsumer],
 })
 export class BookingServiceModule {}

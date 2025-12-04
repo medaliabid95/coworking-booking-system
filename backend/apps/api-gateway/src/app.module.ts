@@ -1,12 +1,11 @@
-// backend/api-gateway/src/app.module.ts
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { BookingsModule } from './bookings/bookings.module';
+import { BookingController } from './bookings/bookings.controller';
+import { BookingGatewayService } from './bookings/bookings.service';
+import { RmqModule } from './rmq/rmq.module';
 
 @Module({
-  imports: [BookingsModule],
-  controllers: [AppController],
-  providers: [AppService],
+  imports: [RmqModule],
+  controllers: [BookingController],
+  providers: [BookingGatewayService],
 })
-export class AppModule {}
+export class ApiGatewayModule {}
