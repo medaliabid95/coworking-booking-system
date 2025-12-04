@@ -1,9 +1,32 @@
+import 'dotenv/config';
+import { Client } from 'pg';
 import { DataSource, DataSourceOptions } from 'typeorm';
 import { ormconfig } from './ormconfig';
 import { Room } from '../../common/src/entities/room.entity';
 import { User } from '../../common/src/entities/user.entity';
 
+async function ensureDatabase() {
+  const dbName = process.env.DB_NAME || 'coworkingdb';
+  const client = new Client({
+    host: process.env.DB_HOST || 'localhost',
+    port: Number(process.env.DB_PORT) || 5432,
+    user: process.env.DB_USER || 'admin',
+    password: process.env.DB_PASS || 'admin',
+    database: 'postgres',
+  });
+
+  await client.connect();
+  const exists = await client.query('SELECT 1 FROM pg_database WHERE datname = $1', [dbName]);
+  if (!exists.rowCount) {
+    await client.query(`CREATE DATABASE "${dbName}"`);
+    console.log(`Created database "${dbName}"`);
+  }
+  await client.end();
+}
+
 async function seed() {
+  await ensureDatabase();
+
   const dataSource = new DataSource(ormconfig as DataSourceOptions);
   await dataSource.initialize();
 

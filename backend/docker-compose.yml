@@ -34,6 +34,7 @@ services:
   # Booking Microservice
   # -----------------------
   booking-service:
+    profiles: ["app"] # only runs when explicitly enabled; omitted for local host-run
     build:
       context: .
       dockerfile: apps/booking-service/Dockerfile
@@ -57,6 +58,7 @@ services:
   # Email Microservice
   # -----------------------
   email-service:
+    profiles: ["app"] # only runs when explicitly enabled; omitted for local host-run
     build:
       context: .
       dockerfile: apps/email-service/Dockerfile
@@ -64,13 +66,26 @@ services:
     restart: always
     depends_on:
       - rabbitmq
+      - mailhog
     environment:
       RABBITMQ_URL: amqp://guest:guest@rabbitmq:5672
-      
-      SMTP_HOST: smtp.gmail.com       # change later
-      SMTP_PORT: 587
-      SMTP_USER: your_email
-      SMTP_PASS: your_password
+
+      SMTP_HOST: mailhog
+      SMTP_PORT: 1025
+      SMTP_FROM: no-reply@coworking.local
+    networks:
+      - coworking
+
+  # -----------------------
+  # MailHog (local email testing)
+  # -----------------------
+  mailhog:
+    image: mailhog/mailhog
+    container_name: coworking_mailhog
+    restart: always
+    ports:
+      - "1025:1025"
+      - "8025:8025"
     networks:
       - coworking
 
@@ -78,8 +93,10 @@ services:
   # API Gateway (optional)
   # -----------------------
   api-gateway:
+    profiles: ["app"] # only runs when explicitly enabled; omitted for local host-run
     build:
       context: .
+      dockerfile: apps/api-gateway/Dockerfile
     container_name: api_gateway
     restart: always
     depends_on:

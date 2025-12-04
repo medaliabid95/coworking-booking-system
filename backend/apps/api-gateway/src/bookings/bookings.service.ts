@@ -53,6 +53,14 @@ export class BookingGatewayService {
     }
   }
 
+  async createOrUpdate(dto: any) {
+    // If a bookingId is provided in the payload, treat this as an update
+    if (dto?.bookingId) {
+      return this.updateBooking(dto as UpdateBookingDto);
+    }
+    return this.createBooking(dto as CreateBookingDto);
+  }
+
   private normalizeError(err: any): { message: string; status: number } {
     const rawStatus =
       err?.response?.statusCode ??

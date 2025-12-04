@@ -14,10 +14,10 @@ export class Booking {
   @ManyToOne(() => Room, (room) => room.bookings)
   room: Room;
 
-  @Column()
+  @Column({ type: 'timestamptz', nullable: true })
   startTime: Date;
 
-  @Column()
+  @Column({ type: 'timestamptz', nullable: true })
   endTime: Date;
 
   @Column({ default: false })

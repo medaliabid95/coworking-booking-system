@@ -7,7 +7,7 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Booking } from '@app/common/entities/booking.entity';
-import { Repository, LessThan, MoreThan } from 'typeorm';
+import { Repository, LessThan, MoreThan, Between } from 'typeorm';
 import { CreateBookingDto } from '@app/common/dtos/create-booking.dto';
 import { CreateUserDto } from '@app/common/dtos/create-user.dto';
 import { User } from '@app/common/entities/user.entity';
@@ -54,7 +54,6 @@ export class BookingService {
       throw new ForbiddenException('Premium rooms require premium membership');
     }
 
-    // Enforce business hours for regular users (Mon-Fri, 09:00-17:00)
     if (!user.isPremium) {
       if (!this.isBusinessHours(start) || !this.isBusinessHours(end)) {
         throw new ForbiddenException('Regular users can book only during business hours');
@@ -74,25 +73,38 @@ export class BookingService {
       throw new ConflictException('Room is not available in the selected time range');
     }
 
+    const guests = Array.isArray(dto.guests)
+      ? dto.guests.filter((g) => typeof g === 'string' && g.trim().length > 0)
+      : [];
+
     const booking = this.bookingRepo.create({
       user,
       room,
       startTime: start,
       endTime: end,
-      guests: dto.guests || [],
+      guests,
       confirmationToken: randomUUID(),
     });
 
-    const saved = await this.bookingRepo.save(booking);
+    await this.bookingRepo.save(booking);
+    const saved = await this.bookingRepo.findOne({
+      where: { id: booking.id },
+      relations: ['user', 'room'],
+    });
 
     // Send RMQ event to email microservice
-    this.producer.bookingCreated(saved);
+    if (saved) {
+      this.producer.bookingCreated(saved);
+    }
 
     return saved;
   }
 
   async confirmBooking(bookingId: string, token?: string) {
-    const booking = await this.bookingRepo.findOne({ where: { id: bookingId } });
+    const booking = await this.bookingRepo.findOne({
+      where: { id: bookingId },
+      relations: ['user', 'room'],
+    });
 
     if (!booking) throw new NotFoundException('Booking not found');
 
@@ -103,9 +115,15 @@ export class BookingService {
     booking.confirmed = true;
     booking.confirmationToken = undefined;
 
-    const updated = await this.bookingRepo.save(booking);
+    await this.bookingRepo.save(booking);
+    const updated = await this.bookingRepo.findOne({
+      where: { id: booking.id },
+      relations: ['user', 'room'],
+    });
 
-    this.producer.bookingConfirmed(updated);
+    if (updated) {
+      this.producer.bookingConfirmed(updated);
+    }
 
     return updated;
   }
@@ -173,10 +191,27 @@ export class BookingService {
     booking.room = room;
     booking.startTime = start;
     booking.endTime = end;
-    if (dto.guests) booking.guests = dto.guests;
+    if (dto.guests) {
+      booking.guests = Array.isArray(dto.guests)
+        ? dto.guests.filter((g) => typeof g === 'string' && g.trim().length > 0)
+        : booking.guests;
+    }
 
-    const updated = await this.bookingRepo.save(booking);
-    console.log('[updateBooking] updated booking', updated.id);
+    // Require re-confirmation after any update
+    booking.confirmed = false;
+    booking.confirmationToken = randomUUID();
+
+    await this.bookingRepo.save(booking);
+    const updated = await this.bookingRepo.findOne({
+      where: { id: booking.id },
+      relations: ['user', 'room'],
+    });
+    console.log('[updateBooking] updated booking', updated?.id);
+
+    // Emit update event (re-send confirmation/reminder email with new details)
+    if (updated) {
+      this.producer.bookingUpdated(updated);
+    }
     return updated;
   }
 
@@ -195,6 +230,35 @@ export class BookingService {
 
   async findUserByEmail(email: string) {
     return this.userRepo.findOne({ where: { email } });
+  }
+
+  async getUpcomingReminders(windowMinutes = 5) {
+    const now = new Date();
+    const targetStart = now.getTime() + windowMinutes * 60 * 1000;
+
+    // Use a narrow ±30s window around the target (4:30-5:30 minutes from now) to avoid immediate sends
+    const windowStart = new Date(targetStart - 30 * 1000);
+    const windowEnd = new Date(targetStart + 30 * 1000);
+
+    // Start reminders: confirmed bookings starting soon
+    const startReminders = await this.bookingRepo.find({
+      where: {
+        confirmed: true,
+        startTime: Between(windowStart, windowEnd),
+      },
+      relations: ['user', 'room'],
+    });
+
+    // Checkout reminders: confirmed bookings ending soon
+    const endReminders = await this.bookingRepo.find({
+      where: {
+        confirmed: true,
+        endTime: Between(windowStart, windowEnd),
+      },
+      relations: ['user', 'room'],
+    });
+
+    return { startReminders, endReminders };
   }
 
   private isBusinessHours(date: Date) {

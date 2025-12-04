@@ -8,10 +8,11 @@ import {
 @Injectable()
 export class RmqService {
   getClient(queue: string): ClientProxy {
+    const rmqUrl = process.env.RABBITMQ_URL || 'amqp://guest:guest@localhost:5672';
     return ClientProxyFactory.create({
       transport: Transport.RMQ,
       options: {
-        urls: ['amqp://guest:guest@localhost:5672'],
+        urls: [rmqUrl],
         queue,
       },
     });

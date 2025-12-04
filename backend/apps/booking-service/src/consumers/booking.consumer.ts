@@ -38,4 +38,9 @@ export class BookingConsumer {
   findUserByEmail(data: { email: string }) {
     return this.bookingService.findUserByEmail(data.email);
   }
+
+  @MessagePattern('get_upcoming_reminders')
+  getUpcomingReminders() {
+    return this.bookingService.getUpcomingReminders();
+  }
 }

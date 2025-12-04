@@ -9,7 +9,7 @@ export const ormconfig: TypeOrmModuleOptions = {
   port: Number(process.env.DB_PORT) || 5432,
   username: process.env.DB_USER || 'admin',
   password: process.env.DB_PASS || 'admin',
-  database: process.env.DB_NAME || 'coworking',
+  database: process.env.DB_NAME || 'coworkingdb',
   entities: [User, Room, Booking],
   synchronize: true,
   autoLoadEntities: true,
