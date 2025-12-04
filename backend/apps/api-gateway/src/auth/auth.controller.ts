@@ -12,7 +12,6 @@ export class AuthController {
   ) {}
 
   @Post('register')
-  // eslint-disable-next-line @typescript-eslint/require-await
   async register(@Body() dto: CreateUserDto) {
     return this.usersService.create(dto);
   }
@@ -20,7 +19,6 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Request() req) {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
     return this.authService.login(req.user);
   }
 }

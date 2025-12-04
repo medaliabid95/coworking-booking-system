@@ -92,7 +92,6 @@ export class BookingService {
       relations: ['user', 'room'],
     });
 
-    // Send RMQ event to email microservice
     if (saved) {
       this.producer.bookingCreated(saved);
     }
@@ -145,7 +144,7 @@ export class BookingService {
 
     const user = booking.user;
 
-    // Resolve room: use provided or current
+
     let room = booking.room;
     if (dto.roomId && dto.roomId !== booking.room.id) {
       const found = await this.roomRepo.findOne({ where: { id: dto.roomId } });
@@ -174,7 +173,6 @@ export class BookingService {
       }
     }
 
-    // Overlap check excluding current booking
     const overlapping = await this.bookingRepo
       .createQueryBuilder('b')
       .leftJoin('b.room', 'room')
@@ -197,7 +195,6 @@ export class BookingService {
         : booking.guests;
     }
 
-    // Require re-confirmation after any update
     booking.confirmed = false;
     booking.confirmationToken = randomUUID();
 
@@ -208,7 +205,6 @@ export class BookingService {
     });
     console.log('[updateBooking] updated booking', updated?.id);
 
-    // Emit update event (re-send confirmation/reminder email with new details)
     if (updated) {
       this.producer.bookingUpdated(updated);
     }
@@ -236,11 +232,9 @@ export class BookingService {
     const now = new Date();
     const targetStart = now.getTime() + windowMinutes * 60 * 1000;
 
-    // Use a narrow ±30s window around the target (4:30-5:30 minutes from now) to avoid immediate sends
     const windowStart = new Date(targetStart - 30 * 1000);
     const windowEnd = new Date(targetStart + 30 * 1000);
 
-    // Start reminders: confirmed bookings starting soon
     const startReminders = await this.bookingRepo.find({
       where: {
         confirmed: true,
@@ -249,7 +243,6 @@ export class BookingService {
       relations: ['user', 'room'],
     });
 
-    // Checkout reminders: confirmed bookings ending soon
     const endReminders = await this.bookingRepo.find({
       where: {
         confirmed: true,
