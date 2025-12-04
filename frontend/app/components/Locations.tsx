@@ -1,6 +1,5 @@
 'use client'
 import React from 'react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const locations = [
   { number: '01', name: 'Atlanta' },
@@ -52,7 +51,7 @@ export default function Locations() {
                 className="rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition animate-fadeIn"
                 style={{ animationDelay: `${0.4 + index * 0.1}s` }}
               >
-                <ImageWithFallback
+                <img
                   src={image}
                   alt={`Location ${index + 1}`}
                   className="w-full h-96 object-cover hover:scale-110 transition-transform duration-500"

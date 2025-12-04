@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
 import { Circle } from 'lucide-react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 export default function About() {
   return (
@@ -11,7 +10,7 @@ export default function About() {
           {/* Image */}
           <div className="relative animate-fadeIn">
             <div className="rounded-lg overflow-hidden shadow-2xl">
-              <ImageWithFallback
+              <img
                 src="https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=1000&fit=crop"
                 alt="Co-working space"
                 className="w-full h-auto"

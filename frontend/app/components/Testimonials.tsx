@@ -1,6 +1,5 @@
 'use client'
 import { Star } from 'lucide-react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const testimonials = [
   {
@@ -69,7 +68,7 @@ export default function Testimonials() {
 
               {/* Author */}
               <div className="flex items-center gap-4">
-                <ImageWithFallback
+                <img
                   src={testimonial.image}
                   alt={testimonial.name}
                   className="w-16 h-16 rounded-full object-cover"

@@ -33,12 +33,12 @@ export default function SpacesPage() {
         </div>
       </div>
     </section>
-     <Spaces/>
+     <Spaces showBrowseButton={false}/>
      <Facilities/>
      <BrowseBySize/>
      <HowItWorks/>
      <Footer />
      
-    </>
-  );
+   </>
+ );
 }

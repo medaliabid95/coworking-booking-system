@@ -1,7 +1,6 @@
 'use client'
 import React from 'react';
 import { Calendar } from 'lucide-react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const posts = [
   {
@@ -57,7 +56,7 @@ export default function Blog() {
             >
               {/* Image */}
               <div className="relative overflow-hidden">
-                <ImageWithFallback
+                <img
                   src={post.image}
                   alt={post.title}
                   className="w-full h-56 object-cover hover:scale-110 transition-transform duration-500"

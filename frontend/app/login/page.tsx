@@ -10,19 +10,102 @@ export default function Login() {
     name: '',
     email: '',
     password: '',
-    confirmPassword: ''
+    confirmPassword: '',
+    isPremium: false,
   });
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  const [success, setSuccess] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3000/api';
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    setError(null);
+    setSuccess(null);
+
+    if (!isLogin && formData.password !== formData.confirmPassword) {
+      setError('Passwords do not match');
+      return;
+    }
+
+    setLoading(true);
+    try {
+      if (isLogin) {
+        const res = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+        if (!res.ok) throw new Error('Invalid credentials');
+        const data = (await res.json()) as { access_token: string };
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('email', formData.email);
+        const userRes = await fetch(`${API_URL}/users/${encodeURIComponent(formData.email)}`);
+        if (userRes.ok) {
+          const user = await userRes.json();
+          if (user?.id) localStorage.setItem('userId', user.id as string);
+          if (typeof user?.isPremium === 'boolean') {
+            localStorage.setItem('isPremium', String(user.isPremium));
+          }
+        }
+        setSuccess('Logged in successfully. Redirecting...');
+        setTimeout(() => {
+          window.location.href = '/spaces';
+        }, 800);
+      } else {
+        const res = await fetch(`${API_URL}/auth/register`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: formData.name,
+            email: formData.email,
+            password: formData.password,
+            isPremium: formData.isPremium,
+          }),
+        });
+        if (!res.ok) throw new Error('Registration failed');
+
+        const loginRes = await fetch(`${API_URL}/auth/login`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email: formData.email,
+            password: formData.password,
+          }),
+        });
+        if (!loginRes.ok) throw new Error('Login failed after registration');
+        const data = (await loginRes.json()) as { access_token: string };
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('email', formData.email);
+        const userRes = await fetch(`${API_URL}/users/${encodeURIComponent(formData.email)}`);
+        if (userRes.ok) {
+          const user = await userRes.json();
+          if (user?.id) localStorage.setItem('userId', user.id as string);
+          if (typeof user?.isPremium === 'boolean') {
+            localStorage.setItem('isPremium', String(user.isPremium));
+          }
+        }
+        setSuccess('Account created. Redirecting...');
+        setTimeout(() => {
+          window.location.href = '/spaces';
+        }, 800);
+      }
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Something went wrong');
+    } finally {
+      setLoading(false);
+    }
   };
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value, type, checked } = e.target;
     setFormData({
       ...formData,
-      [e.target.name]: e.target.value
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -72,6 +155,21 @@ export default function Login() {
                     placeholder="John Doe"
                   />
                 </div>
+              </div>
+            )}
+            {!isLogin && (
+              <div className="flex items-center gap-2">
+                <input
+                  id="isPremium"
+                  name="isPremium"
+                  type="checkbox"
+                  checked={formData.isPremium}
+                  onChange={handleChange}
+                  className="h-4 w-4 text-orange-500 focus:ring-orange-500 border-gray-300 rounded"
+                />
+                <label htmlFor="isPremium" className="text-sm text-gray-700">
+                  Premium membership
+                </label>
               </div>
             )}
 
@@ -177,11 +275,15 @@ export default function Login() {
             {/* Submit Button */}
             <button
               type="submit"
-              className="w-full bg-black text-white py-3 rounded-lg hover:bg-orange-500 transition flex items-center justify-center gap-2 group"
+              className="w-full bg-black text-white py-3 rounded-lg hover:bg-orange-500 transition flex items-center justify-center gap-2 group disabled:opacity-60"
+              disabled={loading}
             >
-              <span>{isLogin ? 'Sign In' : 'Create Account'}</span>
+              <span>{loading ? 'Please wait...' : isLogin ? 'Sign In' : 'Create Account'}</span>
               <ArrowRight size={20} className="group-hover:translate-x-1 transition-transform" />
             </button>
+
+            {error && <p className="text-red-600 text-sm">{error}</p>}
+            {success && <p className="text-green-600 text-sm">{success}</p>}
           </form>
 
           {/* Divider */}
@@ -236,9 +338,20 @@ export default function Login() {
 
         {/* Back to Home */}
         <div className="mt-6 text-center">
-                <Link href="/" className="text-sm text-gray-600 hover:text-orange-500 transition">
+          <Link href="/" className="text-sm text-gray-600 hover:text-orange-500 transition">
             ← Back to Home
           </Link>
+        </div>
+
+        {/* Booking rules info */}
+        <div className="mt-4 text-sm text-gray-600 bg-orange-50 border border-orange-100 rounded-lg p-4">
+          <p className="font-semibold text-orange-700 mb-1">Booking rules</p>
+          <ul className="list-disc list-inside space-y-1 text-gray-700">
+            <li>Premium rooms require a premium membership.</li>
+            <li>Regular users can book only Mon–Fri, 09:00–17:00 UTC.</li>
+            <li>Bookings need a start and end time with no overlaps.</li>
+            <li>Guests are optional.</li>
+          </ul>
         </div>
       </div>
     </div>

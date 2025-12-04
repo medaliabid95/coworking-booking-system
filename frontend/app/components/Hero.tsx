@@ -1,7 +1,6 @@
 'use client'
 import React, { useState, useEffect } from 'react';
 import { Facebook, Twitter, Youtube, Instagram } from 'lucide-react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const heroImages = [
   'https://images.unsplash.com/photo-1497366216548-37526070297c?w=1600&h=900&fit=crop',
@@ -32,7 +31,7 @@ export default function Hero() {
               index === currentImageIndex ? 'opacity-100' : 'opacity-0'
             }`}
           >
-            <ImageWithFallback
+            <img
               src={image}
               alt={`Co-working space ${index + 1}`}
               className="w-full h-full object-cover"
@@ -54,13 +53,19 @@ export default function Hero() {
               Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.
             </p>
        <div className="flex flex-wrap gap-4 animate-fadeIn" style={{ animationDelay: '0.6s' }}>
-          <button className="bg-black text-white px-8 py-3 rounded transition hover:bg-orange-500">
-            Book Now!
-          </button>
+          <a
+            href="/login"
+            className="bg-black text-white px-8 py-3 rounded transition hover:bg-orange-500"
+          >
+            Get Started
+          </a>
 
-          <button className="border-2 border-white text-white px-8 py-3 rounded transition hover:bg-orange-500 hover:border-orange-500">
-            Get a Tour
-          </button>
+          <a
+            href="/login"
+            className="border-2 border-white text-white px-8 py-3 rounded transition hover:bg-orange-500 hover:border-orange-500"
+          >
+            Book Now
+          </a>
         </div>
 
           </div>

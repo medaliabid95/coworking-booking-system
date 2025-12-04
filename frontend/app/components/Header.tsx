@@ -5,10 +5,33 @@ import Link from "next/link";
 
 export default function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isAuthed, setIsAuthed] = useState(false);
   const [mobileDropdowns, setMobileDropdowns] = useState({
     spaces: false,
     pages: false,
   });
+
+  React.useEffect(() => {
+    try {
+      const token = localStorage.getItem('token');
+      setIsAuthed(!!token);
+    } catch {
+      setIsAuthed(false);
+    }
+  }, []);
+
+  const handleLogout = () => {
+    try {
+      localStorage.removeItem('token');
+      localStorage.removeItem('email');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('isPremium');
+    } catch {
+      /* ignore */
+    }
+    setIsAuthed(false);
+    window.location.href = '/login';
+  };
 
   const toggleMobileDropdown = (key: "spaces" | "pages") => {
     setMobileDropdowns(prev => ({
@@ -69,9 +92,18 @@ export default function Header() {
             </div>
 
             <Link href="/contact" className="text-[#9f9f9f] hover:text-black transition">Contact</Link>
-            <Link href="#" className="bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
-              Get Started
-            </Link>
+            {isAuthed ? (
+              <button
+                onClick={handleLogout}
+                className="bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href="/login" className="bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black">
+                Login
+              </Link>
+            )}
           </nav>
 
           {/* Mobile Menu Button */}
@@ -129,9 +161,18 @@ export default function Header() {
             </div>
 
             <Link href="/contact" className="block text-black">Contact</Link>
-            <Link href="#" className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black block text-center">
-              Get Started
-            </Link>
+            {isAuthed ? (
+              <button
+                onClick={handleLogout}
+                className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black block text-center"
+              >
+                Logout
+              </button>
+            ) : (
+              <Link href="/login" className="w-full bg-black text-white px-6 py-2 rounded transition hover:bg-orange-500 hover:text-black block text-center">
+                Login
+              </Link>
+            )}
           </div>
         )}
       </div>

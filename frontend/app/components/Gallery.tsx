@@ -1,6 +1,5 @@
 'use client'
 import React, { useState, useEffect } from 'react';
-import { ImageWithFallback } from './ui/ImageWithFallback';
 
 const galleryImages = [
   'https://images.unsplash.com/photo-1497366216548-37526070297c?w=800&h=600&fit=crop',
@@ -36,7 +35,7 @@ export default function Gallery() {
             <div className="flex gap-8 animate-scroll">
               {[...galleryImages, ...galleryImages].map((image, index) => (
                 <div key={index} className="flex-shrink-0 w-96">
-                  <ImageWithFallback
+                  <img
                     src={image}
                     alt={`Gallery image ${index + 1}`}
                     className="w-full h-72 object-cover rounded-lg"
@@ -53,7 +52,7 @@ export default function Gallery() {
             <div className="flex gap-8 animate-scroll-reverse">
               {[...galleryImages, ...galleryImages].map((image, index) => (
                 <div key={index} className="flex-shrink-0 w-96">
-                  <ImageWithFallback
+                  <img
                     src={image}
                     alt={`Gallery image ${index + 1}`}
                     className="w-full h-72 object-cover rounded-lg"

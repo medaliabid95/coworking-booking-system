@@ -24,7 +24,7 @@ export default function App() {
       <Hero />
       <Stats />
       <Quote />
-      <Spaces />
+      <Spaces limit={4} random showBrowseButton browseHref="/spaces" />
       <Facilities />
       <BrowseBySize />
       <About />
