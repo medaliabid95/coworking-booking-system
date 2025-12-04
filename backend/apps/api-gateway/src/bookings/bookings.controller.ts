@@ -10,7 +10,7 @@ export class BookingController {
 
   @Post()
   createBooking(@Body() dto: CreateBookingDto & { bookingId?: string }) {
-    // Frontend may POST for both create and update; if bookingId is present, treat as update
+    
     return this.bookingService.createOrUpdate(dto);
   }
 
@@ -24,7 +24,6 @@ export class BookingController {
     return this.bookingService.updateBooking({ ...dto, bookingId: id });
   }
 
-  // Confirmation link handler (GET /api/bookings/confirm?bookingId=...&token=...)
   @Get('confirm')
   confirmBookingGet(@Query('bookingId') bookingId: string, @Query('token') token?: string) {
     return this.bookingService.confirmBooking({ bookingId, token });

@@ -11,10 +11,7 @@ import { BookingProducer } from './producers/booking.producer';
 import { BookingConsumer } from './consumers/booking.consumer';
 
 @Module({
-  imports: [
-    DatabaseModule, // registers DataSource / TypeORM connection
-    TypeOrmModule.forFeature([Booking, User, Room]),
-  ],
+  imports: [DatabaseModule, TypeOrmModule.forFeature([Booking, User, Room])],
   controllers: [BookingServiceController, BookingConsumer],
   providers: [BookingService, BookingProducer],
 })
