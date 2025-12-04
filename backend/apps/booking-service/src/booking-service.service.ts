@@ -115,11 +115,15 @@ export class BookingService {
   }
 
   async updateBooking(dto: UpdateBookingDto) {
+    console.log('[updateBooking] incoming dto:', dto);
     const booking = await this.bookingRepo.findOne({
       where: { id: dto.bookingId },
       relations: ['user', 'room'],
     });
-    if (!booking) throw new NotFoundException('Booking not found');
+    if (!booking) {
+      console.error('[updateBooking] booking not found', dto.bookingId);
+      throw new NotFoundException('Booking not found');
+    }
 
     const user = booking.user;
 
@@ -162,6 +166,7 @@ export class BookingService {
       .andWhere('b.endTime > :start', { start })
       .getOne();
     if (overlapping) {
+      console.error('[updateBooking] overlap found with booking', overlapping.id);
       throw new ConflictException('Room is not available in the selected time range');
     }
 
@@ -171,6 +176,7 @@ export class BookingService {
     if (dto.guests) booking.guests = dto.guests;
 
     const updated = await this.bookingRepo.save(booking);
+    console.log('[updateBooking] updated booking', updated.id);
     return updated;
   }
 

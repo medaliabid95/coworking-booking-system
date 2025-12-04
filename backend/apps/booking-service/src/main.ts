@@ -4,26 +4,20 @@ import { Transport, MicroserviceOptions } from '@nestjs/microservices';
 import { BookingServiceModule } from './booking-service.module';
 
 async function bootstrap() {
-  // Create HTTP app
-  const app = await NestFactory.create(BookingServiceModule);
-
-  // Connect to RabbitMQ as microservice
-  app.connectMicroservice<MicroserviceOptions>({
-    transport: Transport.RMQ,
-    options: {
-      urls: ['amqp://localhost:5672'],
-      queue: 'booking_queue',
-      queueOptions: {
-        durable: true,
+  // Run as a pure microservice to avoid HTTP port conflicts
+  const app = await NestFactory.createMicroservice<MicroserviceOptions>(
+    BookingServiceModule,
+    {
+      transport: Transport.RMQ,
+      options: {
+        urls: ['amqp://localhost:5672'],
+        queue: 'booking_queue',
+        queueOptions: { durable: true },
       },
     },
-  });
+  );
 
-  // Start all services
-  await app.startAllMicroservices();
-  await app.listen(3001); // Use a different port than API Gateway
-
-  console.log(`Booking Service is running on HTTP: ${await app.getUrl()}`);
-  console.log('Booking Service is connected to RabbitMQ');
+  await app.listen();
+  console.log('Booking Service microservice is connected to RabbitMQ');
 }
 bootstrap();

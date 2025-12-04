@@ -158,7 +158,7 @@ export default function SpaceBooking() {
               (res.status === 403
                 ? 'Premium rooms require premium membership or booking outside allowed hours.'
                 : res.status === 409
-                  ? 'Room is not available in the selected time range.'
+                  ? 'Room is not available in the selected time range (overlap with another booking).'
                   : `Booking failed (HTTP ${res.status}). Ensure non-premium room and Mon–Fri 09:00–17:00 UTC.`);
         throw new Error(msg);
       }
@@ -336,3 +336,11 @@ export default function SpaceBooking() {
     </>
   );
 }
+
+
+
+
+
+
+
+

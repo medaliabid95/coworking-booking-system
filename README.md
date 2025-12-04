@@ -109,7 +109,3 @@ Rules enforced:
 - Regular users: bookings only Mon–Fri 09:00–17:00 UTC.
 - No overlapping bookings; end time must be after start.
 
-### Common issues
-- Port 3000 in use: stop existing process using that port, then restart api-gateway.
-- 500 errors on bookings: ensure booking-service is running and RabbitMQ is up.
-- Emails not received: make sure email-service is running and SMTP/Mailhog is reachable.
