@@ -1,6 +1,6 @@
 import { Controller } from '@nestjs/common';
-import { EmailService } from './email-service.service';
 import { EventPattern, Payload } from '@nestjs/microservices';
+import { EmailService } from './mailer/email.service';
 
 @Controller()
 export class EmailServiceController {
@@ -8,6 +8,11 @@ export class EmailServiceController {
 
   @EventPattern('booking_created')
   async handleBookingCreated(@Payload() booking: any) {
-    await this.emailService.handleBookingCreated(booking);
+    await this.emailService.sendConfirmationEmail(booking);
+  }
+
+  @EventPattern('booking_confirmed')
+  async handleBookingConfirmed(@Payload() booking: any) {
+    await this.emailService.sendReminderEmail(booking);
   }
 }

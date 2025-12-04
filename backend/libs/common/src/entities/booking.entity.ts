@@ -1,6 +1,7 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from 'typeorm';
 import { User } from './user.entity';
 import { Room } from './room.entity';
+import { randomUUID } from 'crypto';
 
 @Entity()
 export class Booking {
@@ -21,4 +22,17 @@ export class Booking {
 
   @Column({ default: false })
   confirmed: boolean;
+
+  @Column({ nullable: true })
+  confirmationToken?: string;
+
+  @Column('text', { array: true, default: [] })
+  guests: string[];
+
+  constructor() {
+    // auto generate a token if not set when instantiated
+    if (!this.confirmationToken) {
+      this.confirmationToken = randomUUID();
+    }
+  }
 }

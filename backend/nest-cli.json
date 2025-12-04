@@ -5,6 +5,15 @@
   "root": "apps",
   "sourceRoot": "apps/api-gateway/src",
   "projects": {
+    "api-gateway": {
+      "type": "application",
+      "root": "apps/api-gateway",
+      "entryFile": "main",
+      "sourceRoot": "apps/api-gateway/src",
+      "compilerOptions": {
+        "tsConfigPath": "apps/api-gateway/tsconfig.app.json"
+      }
+    },
     "booking-service": {
       "type": "application",
       "root": "apps/booking-service",

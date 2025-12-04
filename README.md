@@ -52,3 +52,64 @@ The assessment will be evaluated based on the following criteria:
 5. Adherence to the frontend and backend frameworks (Next.js and Nest.js) and proper use of
 their features and best practices
 6. Evaluation of the understanding of each used dependency
+
+## Quickstart (local dev)
+
+### Prereqs
+- Node.js 18+ and npm
+- Docker (for RabbitMQ + optional Mailhog)
+- PostgreSQL running and reachable (set env below)
+
+### Backend
+```bash
+cd backend
+npm install
+# start RabbitMQ for messaging
+docker compose up -d rabbitmq
+# create .env (example)
+cat > .env <<'EOF'
+DATABASE_URL=postgres://postgres:postgres@localhost:5432/coworking
+JWT_SECRET=devsecret
+SMTP_HOST=localhost
+SMTP_PORT=1025
+SMTP_FROM=no-reply@example.com
+FRONTEND_URL=http://localhost:3000
+EOF
+# generate seed data
+npx ts-node libs/database/src/seeds.ts
+# start services (in separate terminals)
+npx nest start booking-service --watch
+npx nest start email-service --watch
+npx nest start api-gateway --watch
+```
+
+### Frontend
+```bash
+cd frontend
+npm install
+npm run dev -- --hostname 0.0.0.0 --port 3000
+```
+
+### Testing email locally
+```bash
+docker run -p 1025:1025 -p 8025:8025 mailhog/mailhog
+# open http://localhost:8025 to view emails
+```
+
+### Key API endpoints (via API Gateway, default http://localhost:3000/api)
+- `POST /auth/register` {name, email, password, isPremium?}
+- `POST /auth/login` {email, password}
+- `GET /rooms` list rooms
+- `POST /bookings` create booking
+- `PATCH /bookings/:id` update booking (room/time/guests)
+- `PATCH /bookings/confirm` {bookingId, token?} confirm booking
+
+Rules enforced:
+- Premium rooms require premium users.
+- Regular users: bookings only Mon–Fri 09:00–17:00 UTC.
+- No overlapping bookings; end time must be after start.
+
+### Common issues
+- Port 3000 in use: stop existing process using that port, then restart api-gateway.
+- 500 errors on bookings: ensure booking-service is running and RabbitMQ is up.
+- Emails not received: make sure email-service is running and SMTP/Mailhog is reachable.
